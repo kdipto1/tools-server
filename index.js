@@ -206,9 +206,11 @@ async function run() {
       res.send(result);
     });
     // Post user info in api
-    app.post("/users", async (req, res) => {
+    app.post("/users/:email", async (req, res) => {
+      const email = req.params.email
       const newUser = req.body;
-      const query = { email: newUser.email };
+      const query = { email: email };
+      // const query = { email: newUser.email };
       const exists = await userCollection.findOne(query);
       if (exists) {
         return res.send({ success: false, message: "Old user" });
@@ -217,6 +219,8 @@ async function run() {
         res.send(result);
       }
     });
+    /* ++++++++++++++++ */
+    /* ++++++++++++++++ */
     // Get user info from database
     app.get("/users", verifyJWT, async (req, res) => {
       const email = req.query.email;
