@@ -41,6 +41,7 @@ async function run() {
     const reviewCollection = client.db("AudioBitManufacturer").collection("reviews");
     const userCollection = client.db("AudioBitManufacturer").collection("users");
     const paymentCollection = client.db("AudioBitManufacturer").collection("payments");
+    const blogsCollection = client.db("AudioBitManufacturer").collection("blogs");
     //Payment api
     app.post("/create-payment-intent", verifyJWT, async (req, res) => {
       const order = req.body;
@@ -254,6 +255,18 @@ async function run() {
       const updateDoc = { $set: data };
       const option = { upsert: true };
       const result = await userCollection.updateOne(filter, updateDoc, option);
+      res.send(result);
+    });
+    //Blogs post api
+    app.post("/blogs", async (req, res) => {
+      const blog = req.body;
+      const result = await blogsCollection.insertOne(blog);
+      res.send(result);
+    })
+    //Blogs get api
+    app.get("/blogs", async (req, res) => {
+      const query = {};
+      const result = await blogsCollection.find(query).toArray();
       res.send(result);
     });
   } finally {
