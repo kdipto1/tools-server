@@ -222,16 +222,19 @@ async function run() {
       const email = req.params.email;
       const user = req.body;
       const filter = { email: email };
-      const options = { upsert: true };
-      const updatedDoc = {
-        $set: user,
-      };
-      const result = await userCollection.updateOne(
-        filter,
-        updatedDoc,
-        options
-      );
-      res.send(result);
+      if (!filter) {
+        const options = { upsert: true };
+        const updatedDoc = {
+          $set: user,
+        };
+        const result = await userCollection.updateOne(
+          filter,
+          updatedDoc,
+          options
+        );
+        res.send(result)
+      }
+      res.send({message:"Account available"});
     });
     /* ++++++++++++++++ */
     // Get user info from database
