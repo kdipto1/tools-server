@@ -36,12 +36,24 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const toolsCollection = client.db("AudioBitManufacturer").collection("tools");
-    const orderCollection = client.db("AudioBitManufacturer").collection("orders");
-    const reviewCollection = client.db("AudioBitManufacturer").collection("reviews");
-    const userCollection = client.db("AudioBitManufacturer").collection("users");
-    const paymentCollection = client.db("AudioBitManufacturer").collection("payments");
-    const blogsCollection = client.db("AudioBitManufacturer").collection("blogs");
+    const toolsCollection = client
+      .db("AudioBitManufacturer")
+      .collection("tools");
+    const orderCollection = client
+      .db("AudioBitManufacturer")
+      .collection("orders");
+    const reviewCollection = client
+      .db("AudioBitManufacturer")
+      .collection("reviews");
+    const userCollection = client
+      .db("AudioBitManufacturer")
+      .collection("users");
+    const paymentCollection = client
+      .db("AudioBitManufacturer")
+      .collection("payments");
+    const blogsCollection = client
+      .db("AudioBitManufacturer")
+      .collection("blogs");
     //Payment api
     app.post("/create-payment-intent", verifyJWT, async (req, res) => {
       const order = req.body;
@@ -110,7 +122,7 @@ async function run() {
     app.put("/tool/:id", async (req, res) => {
       const { id } = req.params;
       const data = req.body;
-      console.log(data);
+      // console.log(data);
       const filter = { _id: ObjectId(id) };
       const updateDoc = { $set: { quantity: data.quantity } };
       const option = { upsert: true };
@@ -205,21 +217,22 @@ async function run() {
       ).reverse();
       res.send(result);
     });
-    // Post user info in api
-    app.post("/users/:email", async (req, res) => {
-      const email = req.params.email
-      const newUser = req.body;
-      const query = { email: email };
-      // const query = { email: newUser.email };
-      const exists = await userCollection.findOne(query);
-      if (exists) {
-        return res.send({ success: false, message: "Old user" });
-      } else {
-        const result = await userCollection.insertOne(newUser);
-        res.send(result);
-      }
-    });
     /* ++++++++++++++++ */
+    app.put("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
     /* ++++++++++++++++ */
     // Get user info from database
     app.get("/users", verifyJWT, async (req, res) => {
@@ -266,7 +279,7 @@ async function run() {
       const blog = req.body;
       const result = await blogsCollection.insertOne(blog);
       res.send(result);
-    })
+    });
     //Blogs get api
     app.get("/blogs", async (req, res) => {
       const query = {};
