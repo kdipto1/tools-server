@@ -222,8 +222,8 @@ async function run() {
       const email = req.params.email;
       const user = req.body;
       const filter = { email: email };
-      if (!filter) {
-        const options = { upsert: true };
+      // ++++++++
+      const options = { upsert: true };
         const updatedDoc = {
           $set: user,
         };
@@ -233,9 +233,22 @@ async function run() {
           options
         );
         res.send(result)
-      }
-      res.send({message:"Account available"});
-    });
+      })
+      // ++++++++
+      // if (!filter) {
+      //   const options = { upsert: true };
+      //   const updatedDoc = {
+      //     $set: user,
+      //   };
+      //   const result = await userCollection.updateOne(
+      //     filter,
+      //     updatedDoc,
+      //     options
+      //   );
+      //   res.send(result)
+      // }
+    //   res.send({ message: "Account available" });
+    // };);
     /* ++++++++++++++++ */
     // Get user info from database
     app.get("/users", verifyJWT, async (req, res) => {
