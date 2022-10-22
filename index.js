@@ -224,29 +224,29 @@ async function run() {
       const filter = { email: email };
       // ++++++++
       const options = { upsert: true };
-        const updatedDoc = {
-          $set: user,
-        };
-        const result = await userCollection.updateOne(
-          filter,
-          updatedDoc,
-          options
-        );
-        res.send(result)
-      })
-      // ++++++++
-      // if (!filter) {
-      //   const options = { upsert: true };
-      //   const updatedDoc = {
-      //     $set: user,
-      //   };
-      //   const result = await userCollection.updateOne(
-      //     filter,
-      //     updatedDoc,
-      //     options
-      //   );
-      //   res.send(result)
-      // }
+      const updatedDoc = {
+        $set: user,
+      };
+      const result = await userCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
+    // ++++++++
+    // if (!filter) {
+    //   const options = { upsert: true };
+    //   const updatedDoc = {
+    //     $set: user,
+    //   };
+    //   const result = await userCollection.updateOne(
+    //     filter,
+    //     updatedDoc,
+    //     options
+    //   );
+    //   res.send(result)
+    // }
     //   res.send({ message: "Account available" });
     // };);
     /* ++++++++++++++++ */
