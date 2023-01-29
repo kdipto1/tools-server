@@ -8,7 +8,11 @@ const jwt = require("jsonwebtoken");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //middleware
 app.use(cors());
-app.use(express.json());
+// app.use(express.json());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 
 //Verify token function:
 function verifyJWT(req, res, next) {
